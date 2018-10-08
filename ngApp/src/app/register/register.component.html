@@ -1,0 +1,88 @@
+<div class="jumbotron">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <form #f="ngForm" (ngSubmit)="registerUser(f)">
+          <div class="alert alert-danger" *ngIf="error">{{error}}</div>
+          <div class="form-group">
+            <h2>Register</h2>
+            <label for="firstName">FirstName</label>
+            <input required ngModel name="firstName" #firstName="ngModel" [(ngModel)]="registerUserData.firstName" placeholder="Enter FirstName"
+              (change)="log(firstName)" id="firstName" type="text" class="form-control">
+            <div class="alert alert-danger" *ngIf="firstName.touched && !firstName.valid">FirstName is required</div>
+          </div>
+
+          <div class="form-group">
+            <label for="lastName">LastName</label>
+            <input required ngModel name="lastName" #lastName="ngModel" [(ngModel)]="registerUserData.lastName" placeholder="Enter lastName"
+              (change)="log(lastName)" id="lastName" type="text" class="form-control">
+            <div class="alert alert-danger" *ngIf="lastName.touched && !lastName.valid">LastName is required</div>
+          </div>
+
+          <!-- <div class="form-group"> -->
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input required ngModel name="email" #email="ngModel" [(ngModel)]="registerUserData.email" placeholder="Enter email" (change)="log(email)"
+              id="email" type="email" pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$" class="form-control">
+            <div class="alert alert-danger" *ngIf="email.touched && !email.valid">
+              <div *ngIf="email.errors.required">Email is required</div>
+              <div *ngIf="email.errors.pattern">Invalid Email</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input required miinlength="4" ngModel name="password" #password="ngModel" [(ngModel)]="registerUserData.password" placeholder="Enter password"
+              (change)="log(password)" id="password" type="password" class="form-control">
+            <div class="alert alert-danger" *ngIf="password.touched && !password.valid">password is required</div>
+          </div>
+
+          <div class="form-group">
+            <label for="contact">Contact No</label>
+            <input required ngModel name="contact" #contact="ngModel" [(ngModel)]="registerUserData.contact" placeholder="Enter contactNo"
+              (change)="log(contact)" id="contact" type="text" class="form-control">
+            <div class="alert alert-danger" *ngIf="contact.touched && !contact.valid">Contact No is required</div>
+          </div>
+
+          <div class="custom-control custom-radio custom-control-inline">
+            <input [(ngModel)]="registerUserData.isDriver" type="radio" class="custom-control-input" id="customRadio" name="isDriver"
+              [value]="false">
+            <label class="custom-control-label" for="customRadio">User</label>
+          </div>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input [(ngModel)]="registerUserData.isDriver" type="radio" class="custom-control-input" id="customRadio2" name="isDriver"
+              [value]="true">
+            <label class="custom-control-label" for="customRadio2">Driver</label>
+          </div>
+
+
+          <div class="form-group">
+            <button [disabled]="!f.valid" type="submit" class="btn btn-primary float-right">Register</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- <div class="form-group">
+  <label for="password">Password</label>
+  <input class="form-control" type="password" name="password" formControlName="password">
+</div>
+<p class="bg-danger" *ngIf="passwordFormGroup.controls.password.errors?.required && passwordFormGroup.controls.password.touched">Password is required</p>
+
+<div class="form-group">
+  <label for="repeatPassword">Repeat Password</label>
+  <input class="form-control" type="password" name="repeatPassword" formControlName="repeatPassword">
+</div>
+<p class="bg-danger" *ngIf="passwordFormGroup.controls.repeatPassword.errors?.required && passwordFormGroup.controls.repeatPassword.touched">Repeat password is required</p>
+<p class="bg-danger" *ngIf="passwordFormGroup.errors?.doesMatchPassword">Password does not match</p>
+
+</div>
+<div class="form-group">
+        <button class="form-control btn btn-primary" type="submit" [disabled]="!registrationFormGroup.valid" >Register</button>
+    </div>
+   -->

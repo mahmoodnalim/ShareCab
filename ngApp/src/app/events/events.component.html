@@ -1,0 +1,19 @@
+<h1>
+
+
+
+
+  Edit Profile </h1>
+<form (submit)="onUpdate($event)" class="sc-container">
+  <input type="text" placeholder="First Name" name="firstName" #firstName="ngModel" [(ngModel)]="userdetails.firstName" />
+  <input type="text" placeholder="Last Name" name="lastName" #lastName="ngModel" [(ngModel)]="userdetails.lastName" />
+  <input type="text" placeholder="Email Address" name="email" #email="ngModel" [(ngModel)]="userdetails.email" />
+
+  <input type="text" placeholder="Contact No" name="contact" #contact="ngModel" [(ngModel)]="userdetails.contact" />
+
+
+
+
+  <input type="submit" value="Update" />
+
+</form>
