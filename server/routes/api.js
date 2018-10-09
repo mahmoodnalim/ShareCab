@@ -4,9 +4,9 @@ const router = express.Router();
 const User = require("../models/user");
 const Rider = require("../models/rider");
 const mongoose = require("mongoose");
-  const db = "mongodb://usermamuliga:passwordmamuliga1@ds145072.mlab.com:45072/sharecab";
-  //  "mongodb://localhost/sharecab";
- 
+const db =
+  "mongodb://usermamuliga:passwordmamuliga1@ds145072.mlab.com:45072/sharecab";
+//  "mongodb://localhost/sharecab";
 
 mongoose.connect(
   db,
@@ -18,7 +18,6 @@ mongoose.connect(
     }
   }
 );
-
 function verifyToken(req, res, next) {
   if (!req.headers.authorization) {
     return res.status(401).send("Unauthoraized request");
@@ -47,10 +46,10 @@ router.get("/events", async function(req, res) {
     return res.send({ error: "Access denied! Invalid Token " });
   }
 });
+// let token = req.header("x-token");
 
 router.put("/events", async function(req, res) {
   let token = req.header("x-token");
-
   if (!token) return res.send({ error: "Access denied! Token not provided" });
   try {
     const deUser = jwt.verify(token, "secretKey");
