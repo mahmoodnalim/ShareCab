@@ -14,28 +14,23 @@
 
         <div class="tablet-portrait">
           <div class="form-group">
-            <h3>Give Your Current Location</h3>
-            <input required type="text" placeholder="Location">
+            <input placeholder="search for Destination" autocorrect="off" autocapitalize="off" spellcheck="off" type="text"
+              class="form-control" #search [formControl]="searchControl">
+
 
           </div>
-          <agm-map [latitude]="lat" [longitude]="lng">
-            <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
+
+          <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom">
+
+            <agm-direction *ngIf="destination.lat!==null" [origin]="{lat: lat, lng:lng}" [destination]="destination">
+            </agm-direction>
+
+            <agm-marker *ngIf="destination.lat===null" [latitude]="lat" [longitude]="lng"></agm-marker>
           </agm-map>
 
 
         </div>
-        <div class="tablet-portrait">
-          <div class="form-group">
-            <h3>Give Your Destination</h3>
-            <input required type="text" placeholder="Destination">
 
-          </div>
-          <agm-map [latitude]="lat" [longitude]="lng">
-            <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
-          </agm-map>
-
-
-        </div>
 
 
       </div>

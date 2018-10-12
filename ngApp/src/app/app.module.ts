@@ -1,6 +1,6 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { AppRoutingModule } from "./app-routing.module";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { AppComponent } from "./app.component";
@@ -19,6 +19,7 @@ import { AuthGuardService } from "./auth-guard.service";
 import { AuthDriverGuardService } from "./auth-driver-guard.service";
 import { AgmCoreModule } from "@agm/core";
 import { TokenInterceptorService } from "./token-interceptor.service";
+import { AgmDirectionModule } from "agm-direction";
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,10 +35,17 @@ import { TokenInterceptorService } from "./token-interceptor.service";
   imports: [
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
+    AgmDirectionModule,
     AgmCoreModule.forRoot({
-      apiKey: "AIzaSyAq06l5RUVfib62IYRQacLc-KAy0XIWAVs"
+      apiKey: "AIzaSyCSrsyNzQB2aKrgdYJBrn5iT-GCx4POCXM",
+      // "AIzaSyCTeGj914RtvK3Q59e0tuiE0CttgAGtIs4",
+      //"AIzaSyCr75wBzwyvrP0qHsvGHLwMYw_2R405rNg",
+      //"AIzaSyDTgvM-47XiuHa2QRQE_bDg6WWLMVNAjHs",
+      //"AIzaSyAq06l5RUVfib62IYRQacLc-KAy0XIWAVs",
+      libraries: ["places"]
     })
   ],
   providers: [
