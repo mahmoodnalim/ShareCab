@@ -3,36 +3,81 @@
     <h1 class="text-center">Make your Ride Now!</h1>
     <div class="row">
       <div class="col-md-6">
+        <!--
+          <div [hidden]="autocompleteItems.length == 0">
+            <div
+              *ngFor="let item of autocompleteItems"
+              tappable
+              (click)="selectSearchResult(item)"
+            >
+              {{ item.description }}
+            </div>
+          </div>
+          Total Distance: <span id="total"></span>
+          <div #map id="map"></div>
+        -->
+        <button
+          id="distance"
+          (click)="calculateDistance()"
+          type="button"
+          class="btn btn-primary float-right"
+        >
+          Display distance
+        </button>
+        <!-- <button
+          id="point"
+          (click)="calculateDuration()"
+          type="button"
+          class="btn btn-primary float-right"
+        >
+          Display duration
+        </button> -->
         <h2>Request a Ride</h2>
 
         <!-- smartphone -->
 
-
-
         <!-- tablet -->
 
+        <!-- <div class="tablet-portrait"> -->
+        <div class="form-group">
+          <input
+            placeholder="search for Destination"
+            autocorrect="off"
+            autocapitalize="off"
+            spellcheck="off"
+            type="text"
+            class="form-control"
+            #search
+            [formControl]="searchControl"
+          />
 
-        <div class="tablet-portrait">
-          <div class="form-group">
-            <input placeholder="search for Destination" autocorrect="off" autocapitalize="off" spellcheck="off" type="text"
-              class="form-control" #search [formControl]="searchControl">
+          <!--
+            </div>
+            <div class="form-group">
+              <input placeholder="search for Destination" autocorrect="off" autocapitalize="off" spellcheck="off" type="text"
+                class="form-control" #search [formControl]="searchControl">
 
 
-          </div>
+            </div>
+          -->
 
           <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom">
-
-            <agm-direction *ngIf="destination.lat!==null" [origin]="{lat: lat, lng:lng}" [destination]="destination">
+            <agm-direction
+              *ngIf="destination.lat !== null"
+              [origin]="{ lat: lat, lng: lng }"
+              [destination]="destination"
+            >
             </agm-direction>
 
-            <agm-marker *ngIf="destination.lat===null" [latitude]="lat" [longitude]="lng"></agm-marker>
+            <agm-marker
+              *ngIf="destination.lat === null"
+              [latitude]="lat"
+              [longitude]="lng"
+            ></agm-marker>
           </agm-map>
-
-
         </div>
-
-
-
       </div>
     </div>
+    <!-- </div> -->
   </div>
+</div>
