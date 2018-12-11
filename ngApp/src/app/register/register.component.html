@@ -32,7 +32,7 @@
 
           <div class="form-group">
             <label for="password">Password</label>
-            <input required miinlength="4" ngModel name="password" #password="ngModel" [(ngModel)]="registerUserData.password" placeholder="Enter password"
+            <input required minlength="4" ngModel name="password" #password="ngModel" [(ngModel)]="registerUserData.password" placeholder="Enter password"
               (change)="log(password)" id="password" type="password" class="form-control">
             <div class="alert alert-danger" *ngIf="password.touched && !password.valid">password is required</div>
           </div>

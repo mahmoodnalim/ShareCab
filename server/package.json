@@ -2,17 +2,23 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": "8.11.4"
   },
   "keywords": [],
   "author": "Mahmood",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
+    "compression": "^1.7.3",
     "cors": "^2.8.4",
     "express": "^4.16.3",
+    "helmet": "^3.15.0",
     "jsonwebtoken": "^8.3.0",
     "mongoose": "^5.2.12"
   }

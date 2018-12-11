@@ -1,61 +1,112 @@
-<head>
-  <meta charset="utf-8">
+<div class="tab">
+  <!-- <div class="container-fluid"> -->
+  <h1 class="text-center">Make your Drive Now!</h1>
+  <!-- Page Container -->
+  <div class="w3-content w3-margin-top" style="max-width:1400px;">
+    <!-- The Grid -->
+    <div class="w3-row-padding">
+      <div class="w3-third">
+        <div class="w3-white w3-text-grey w3-card-4">
+          <div class="row">
+            <div class="col-md-8">
+              <!--
+                <div class="form-group">
+                <input
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ShareCab</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-  <script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
-</head>
+                  placeholder="search for Destination"
+                  autocorrect="off"
+                  autocapitalize="off"
+                  spellcheck="off"
+                  type="text"
+                  class="form-control"
+                  #search
+                  [formControl]="searchControl"
+                />
+              -->
 
-<body>
+              <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom">
+                <agm-direction
+                  *ngFor="let r of routes"
+                  [origin]="r.origin"
+                  [destination]="r.destination"
+                >
+                </agm-direction>
 
-  <!--- Description -->
-  <div class="container-fluid padding">
-    <div class="row welcome text-center">
-      <div class="col-12">
-        <h1 class="display-6"><br>ShareCab needs partners like you.<br></h1>
-        <p>Drive with ShareCab and earn great money as an independent contractor. Get paid weekly just for helping our community
-          of riders get rides around town. Be your own boss and get paid in fares for driving on your own schedule.</p>
-        <button type="button" class="btn btn-outline-dark btn-lg">Book Your Car</button>
+                <agm-marker
+                  *ngIf="destination.lat === null"
+                  iconUrl="images\ww.png"
+                  [visible]="true"
+                  [latitude]="lat"
+                  [longitude]="lng"
+                ></agm-marker>
+              </agm-map>
+            </div>
+          </div>
+        </div>
+
+        <!--
+          <div class="col-md-4" *ngIf="destination.lat">
+            <button class="btn btn-primary" (click)="getDetails()">Details</button>
+            <div
+              [hidden]="!showDetails"
+              class="bg-primary text-light p-3"
+              id="details-banner"
+            >
+              <p id="duration"></p>
+              <p id="distance"></p>
+            </div>
+          </div>
+        -->
+      </div>
+      <div class="w3-twothird">
+        <div class="w3-container w3-card w3-white w3-margin-bottom">
+          <h5>Feeds</h5>
+          <table class="w3-table w3-striped w3-white">
+            <tr>
+              <td><i class="fa fa-user w3-text-blue w3-large"></i></td>
+              <td>New record, over 90 views.</td>
+              <td><i>10 mins</i></td>
+            </tr>
+            <tr>
+              <td><i class="fa fa-bell w3-text-red w3-large"></i></td>
+              <td>Database error.</td>
+              <td><i>15 mins</i></td>
+            </tr>
+            <tr>
+              <td><i class="fa fa-users w3-text-yellow w3-large"></i></td>
+              <td>New record, over 40 users.</td>
+              <td><i>17 mins</i></td>
+            </tr>
+            <tr>
+              <td><i class="fa fa-comment w3-text-red w3-large"></i></td>
+              <td>New comments.</td>
+              <td><i>25 mins</i></td>
+            </tr>
+            <tr>
+              <td><i class="fa fa-bookmark w3-text-blue w3-large"></i></td>
+              <td>Check transactions.</td>
+              <td><i>28 mins</i></td>
+            </tr>
+            <tr>
+              <td><i class="fa fa-laptop w3-text-red w3-large"></i></td>
+              <td>CPU overload.</td>
+              <td><i>35 mins</i></td>
+            </tr>
+            <tr>
+              <td><i class="fa fa-share-alt w3-text-green w3-large"></i></td>
+              <td>New shares.</td>
+              <td><i>39 mins</i></td>
+            </tr>
+          </table>
+        </div>
+
+        <!-- </div> -->
       </div>
     </div>
   </div>
+</div>
 
-
-  <!--- Three Column Section -->
-  <div class="container-fluid padding">
-    <hr class="light">
-    <br>
-    <div class="row text-center padding">
-      <div class="col-xs-12 col-sm-6 col-md-4">
-        <img src="images/2.png" width="100px">
-        <h3>Make good money.</h3>
-        <p>Got a car? Turn it into a money machine. The city is buzzing and ShareCab makes it easy for you to cash in on
-          the action. Plus, you've already got everything you need to get started.</p>
-      </div>
-      <div class="col-xs-12 col-sm-6 col-md-4">
-        <img src="images/3.png" width="100px">
-        <h3>Drive when you want.</h3>
-        <p>Need something outside the 9 to 5? As an independent contractor with ShareCab, you’ve got freedom and flexibility
-          to drive whenever you have time. Set your own schedule, so you can be there for all of life’s most important moments.</p>
-      </div>
-      <div class="col-sm-12 col-md-4">
-        <img src="images/a.png" width="100px">
-        <h3>No office, no boss.</h3>
-        <p>Whether you’re supporting your family or saving for something big, ShareCab gives you the freedom to get behind
-          the wheel when it makes sense for you. Choose when you drive, where you go, and who you pick up.</p>
-      </div>
-    </div>
-    <hr class="light">
-
-
+<!--
   </div>
-
-
-
-
-
-</body>
+  </div>
+-->

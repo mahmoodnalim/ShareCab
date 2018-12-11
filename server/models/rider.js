@@ -1,16 +1,13 @@
-const mongoose  = require('mongoose')
+const mongoose = require("mongoose");
 
-const Schema = mongoose.Schema
+const Schema = mongoose.Schema;
 const riderSchema = new Schema({
-    firstName : String,
-    lastName : String,
-    email :String ,
-    password : String,
-    contact : String,
-    isDriver : Boolean
-})
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "user"
+  },
+  origin: { lat: Number, lng: Number },
+  destination: { lat: Number, lng: Number }
+});
 
- 
-
-module.exports = mongoose.model('rider', riderSchema, 'riders')
- 
+module.exports = mongoose.model("rider", riderSchema, "riders");

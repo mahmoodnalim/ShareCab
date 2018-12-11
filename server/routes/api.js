@@ -187,4 +187,32 @@ router.get("/special", (req, res) => {
   ];
   res.json(special);
 });
+
+router.post("/rides", async (req, res) => {
+  let riderData = req.body;
+  rider = new Rider(riderData);
+  try {
+    await rider.save();
+    res.send({ msg: "Suceess" });
+  } catch (ex) {
+    res.send({ msg: "failed" });
+  }
+});
+
+router.get("/rides", async (req, res) => {
+  const riders = await Rider.find();
+  res.send(riders);
+});
+
+router.get("/users/:id", async (req, res) => {
+  const id = req.params.id;
+  const user = await User.findById(id).select("firstName lastName contact");
+  res.send(user);
+});
+
+// router.get("/apiUrl", (req, res) => {
+//   req =
+//     "https://eu1.locationiq.com/v1/reverse.php?key=6939bb17fa5a3e&lat=6.7932617&lon=79.8974264&format=json";
+//   res.send(res);
+// });
 module.exports = router;

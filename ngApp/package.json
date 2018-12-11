@@ -24,12 +24,16 @@
     "@auth0/angular-jwt": "^2.0.0",
     "@google/maps": "^0.5.5",
     "agm-direction": "^0.7.3",
+    "angular-reverse-geocode": "^1.0.0",
+    "angular-reverse-geocode-assemany": "^1.0.1",
     "angular2-jwt": "^0.2.3",
     "core-js": "^2.5.4",
+    "cors": "^2.8.5",
     "google-distance-matrix": "^1.1.1",
     "ngx-google-places-autocomplete": "^2.0.1",
     "rxjs": "^6.0.0",
     "save": "^2.3.2",
+    "uber-api": "^0.3.3 ",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {
