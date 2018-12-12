@@ -14,7 +14,7 @@ export class DriverHomeComponent implements OnInit {
   lng: number = null;
   // lats = 36;
   // lons = -94;
-  addr = null;
+  addr = [];
   routes = null;
   contentString;
   zoom: number = 4;
@@ -51,18 +51,18 @@ export class DriverHomeComponent implements OnInit {
       (res: [any]) => {
         console.log(res);
         this.routes = res;
-        this.addr = res.forEach(r => {
+        res.forEach(r => {
           this.authService.getAddress(r.origin.lat, r.origin.lng).subscribe(
-            res => {
-              console.log(res);
+            od => {
+              console.log(od);
               this.authService
                 .getAddress(r.destination.lat, r.destination.lng)
                 .subscribe(
-                  res => {
-                    console.log(res);
+                  dd => {
+                    console.log(dd);
                     this.authService.getOneUser(r.user).subscribe(
-                      res => {
-                        console.log(res);
+                      ud => {
+                        this.addr.push({ od, dd, ud });
                       },
                       err => {
                         console.log(err);
@@ -79,7 +79,7 @@ export class DriverHomeComponent implements OnInit {
             }
           );
         });
-        // console.log(this.addr);
+        console.log(this.addr);
         // this.authService.getAddress(this.lat, this.lng).subscribe(
         //   res => {
         //     console.log({ res });

@@ -84,7 +84,12 @@
         </div>
       </div>
       <div class="col-md-4" *ngIf="destination.lat">
-        <button class="btn btn-primary" (click)="getDetails()">Details</button>
+        <button class="btn btn-primary" (click)="getDetails(false)">
+          Request Shared Ride
+        </button>
+        <button class="btn btn-primary" (click)="getDetails(true)">
+          Request Private Ride
+        </button>
         <div
           [hidden]="!showDetails"
           class="bg-primary text-light p-3"

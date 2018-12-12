@@ -14,4 +14,4 @@ const userSchema = new Schema({
   isDriver: Boolean
 });
 
-module.exports = mongoose.model("user", userSchema, "users");
+module.exports = mongoose.model("user", userSchema);

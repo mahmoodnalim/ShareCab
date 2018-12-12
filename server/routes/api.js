@@ -4,6 +4,8 @@ const router = express.Router();
 const User = require("../models/user");
 const Rider = require("../models/rider");
 const mongoose = require("mongoose");
+const Rides = require("../models/rides");
+const RideHistory = require("../models/rideHistory");
 const db =
   "mongodb://usermamuliga:passwordmamuliga1@ds145072.mlab.com:45072/sharecab";
 //  "mongodb://localhost/sharecab";
@@ -208,6 +210,38 @@ router.get("/users/:id", async (req, res) => {
   const id = req.params.id;
   const user = await User.findById(id).select("firstName lastName contact");
   res.send(user);
+});
+
+router.post("/rides", async (req, res) => {
+  let ridesData = req.body;
+  rides = new Rides(ridesData);
+  try {
+    await rides.save();
+    res.send(rides);
+  } catch (ex) {
+    res.send({ msg: "failed" });
+  }
+});
+
+router.get("/rides", async (req, res) => {
+  const id = req.body.id;
+  const ride = await Rides.find({ riders: id });
+  res.send(ride);
+});
+router.delete("/rides", async (req, res) => {
+  const id = req.body.id;
+  await Rides.findByIdAndDelete(id);
+});
+
+router.post("/rideHistory", async (req, res) => {
+  let rideHistory = req.body;
+  rides = new RideHistory(rideHistory);
+  try {
+    await rides.save();
+    res.send({ msg: "Suceess" });
+  } catch (ex) {
+    res.send({ msg: "failed" });
+  }
 });
 
 // router.get("/apiUrl", (req, res) => {

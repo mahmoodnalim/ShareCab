@@ -7,7 +7,8 @@ const riderSchema = new Schema({
     ref: "user"
   },
   origin: { lat: Number, lng: Number },
-  destination: { lat: Number, lng: Number }
+  destination: { lat: Number, lng: Number },
+  isPrivate: Boolean
 });
 
-module.exports = mongoose.model("rider", riderSchema, "riders");
+module.exports = mongoose.model("rider", riderSchema);

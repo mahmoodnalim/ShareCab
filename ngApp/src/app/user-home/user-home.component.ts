@@ -77,7 +77,8 @@ export class UserHomeComponent implements OnInit {
       });
     });
   }
-  getDetails() {
+  getDetails(isPrivate) {
+    console.log(isPrivate);
     this.showDetails = true;
     this.calculateDistance();
     this.calculateDuration();
@@ -85,7 +86,8 @@ export class UserHomeComponent implements OnInit {
       .postRiders({
         origin: { lat: this.lat, lng: this.lng },
         destination: { lat: this.destination.lat, lng: this.destination.lng },
-        user: this.authService.getCurrentUser().uid
+        user: this.authService.getCurrentUser().uid,
+        isPrivate
       })
       .subscribe(
         res => {
