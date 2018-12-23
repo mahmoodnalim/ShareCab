@@ -14,6 +14,7 @@ import { GoogleMapsAPIWrapper } from "@agm/core/services";
 import { AgmDirectionModule } from "agm-direction";
 import { AuthService } from "../auth.service";
 import { RiderComponent } from "../rider/rider.component";
+import { ChatService } from "../chat.service";
 //import { } from 'googlemaps';
 declare var google: any;
 @Component({
@@ -22,10 +23,15 @@ declare var google: any;
   styleUrls: ["./user-home.component.css"]
 })
 export class UserHomeComponent implements OnInit {
+  message: string;
+  messages: string[] = [];
+  title = "app works!";
   lat: number = null;
   lng: number = null;
   zoom: number = 4;
   showDetails = false;
+  myRides: any;
+  myRides = { riders: [] };
   //origin = { lat: this.lat, lng: this.lng };
   destination = { lat: null, lng: null };
   public searchControl: FormControl;
@@ -37,9 +43,19 @@ export class UserHomeComponent implements OnInit {
     private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone,
     private authService: AuthService
-  ) {}
+  ) // private chatService: ChatService
+  {}
+
+  // sendMessage() {
+  //   this.chatService.sendMessage(this.message);
+  //   this.message = "";
+  // }
 
   ngOnInit() {
+    // this.chatService.getMessages().subscribe((message: string) => {
+    //   this.messages.push(message);
+    // });
+
     navigator.geolocation.getCurrentPosition(
       position => {
         this.lat = position.coords.latitude;
@@ -74,6 +90,7 @@ export class UserHomeComponent implements OnInit {
           console.log(this.destination);
           // this.calculateDistance();
         });
+        [];
       });
     });
   }
@@ -87,6 +104,11 @@ export class UserHomeComponent implements OnInit {
         origin: { lat: this.lat, lng: this.lng },
         destination: { lat: this.destination.lat, lng: this.destination.lng },
         user: this.authService.getCurrentUser().uid,
+        userDetails: {
+          name: this.authService.getCurrentUser().name,
+
+          contact: this.authService.getCurrentUser().contact
+        },
         isPrivate
       })
       .subscribe(
@@ -105,6 +127,18 @@ export class UserHomeComponent implements OnInit {
           console.log(err);
         }
       );
+    const requestInterval = setInterval(() => {
+      this.authService.getMyRides().subscribe(
+        res => {
+          console.log(res);
+          if (res) this.myRides = res;
+          if (this.myRides) clearInterval(requestInterval);
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    }, 500);
   }
 
   calculateDuration() {

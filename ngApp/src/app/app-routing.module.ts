@@ -10,7 +10,7 @@ import { DriverHomeComponent } from "./driver-home/driver-home.component";
 import { HomeComponent } from "./home/home.component";
 import { AuthGuardService } from "./auth-guard.service";
 import { AuthDriverGuardService } from "./auth-driver-guard.service";
-
+import { FeedbackComponent } from "./feedback/feedback.component";
 const routes: Routes = [
   {
     path: "",
@@ -21,7 +21,10 @@ const routes: Routes = [
     component: EventsComponent,
     canActivate: [AuthGuardService]
   },
-
+  {
+    path: "feedback",
+    component: FeedbackComponent
+  },
   {
     path: "special",
     component: SpecialEventsComponent

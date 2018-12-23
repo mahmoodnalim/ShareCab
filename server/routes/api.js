@@ -1,11 +1,13 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
-const router = express.Router();
+
 const User = require("../models/user");
 const Rider = require("../models/rider");
 const mongoose = require("mongoose");
 const Rides = require("../models/rides");
 const RideHistory = require("../models/rideHistory");
+const router = express.Router();
+
 const db =
   "mongodb://usermamuliga:passwordmamuliga1@ds145072.mlab.com:45072/sharecab";
 //  "mongodb://localhost/sharecab";
@@ -60,7 +62,8 @@ router.put("/events", async function(req, res) {
       uid: user._id,
       name: user.firstName + " " + user.lastName,
       isDriver: user.isDriver,
-      email: user.email
+      email: user.email,
+      contact: user.contact
     };
     token = jwt.sign(payload, "secretKey");
     res.send(token);
@@ -140,7 +143,8 @@ router.post("/login", (req, res) => {
           uid: user._id,
           name: user.firstName + " " + user.lastName,
           isDriver: user.isDriver,
-          email: user.email
+          email: user.email,
+          contact: user.contact
         };
         let token = jwt.sign(payload, "secretKey");
         res.status(200).send({ token });
@@ -212,9 +216,10 @@ router.get("/users/:id", async (req, res) => {
   res.send(user);
 });
 
-router.post("/rides", async (req, res) => {
+router.post("/ridesd", async (req, res) => {
   let ridesData = req.body;
   rides = new Rides(ridesData);
+
   try {
     await rides.save();
     res.send(rides);
@@ -223,14 +228,32 @@ router.post("/rides", async (req, res) => {
   }
 });
 
-router.get("/rides", async (req, res) => {
-  const id = req.body.id;
-  const ride = await Rides.find({ riders: id });
+router.get("/ridesd/:id", async (req, res) => {
+  const id = req.params.id;
+  const ride = await Rides.findOne({
+    riders: { $elemMatch: { uid: id } }
+  });
   res.send(ride);
 });
-router.delete("/rides", async (req, res) => {
-  const id = req.body.id;
-  await Rides.findByIdAndDelete(id);
+router.delete("/ridesd/:id", async (req, res) => {
+  const id = req.params.id;
+  const r = await Rides.findByIdAndDelete(id);
+  res.send(r);
+});
+
+router.delete("/rides/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const r = await Rider.findByIdAndDelete(id);
+    // const r = [];
+    // await ids.forEach(async id => {
+    //   const z = await Rider.findByIdAndDelete(id);
+    //   r.push(z);
+    // });
+    res.send({ dlt: r });
+  } catch (ex) {
+    res.send({ dlt: ex.message });
+  }
 });
 
 router.post("/rideHistory", async (req, res) => {
@@ -238,12 +261,21 @@ router.post("/rideHistory", async (req, res) => {
   rides = new RideHistory(rideHistory);
   try {
     await rides.save();
-    res.send({ msg: "Suceess" });
+    res.send({ hys: "Suceess" });
   } catch (ex) {
     res.send({ msg: "failed" });
   }
 });
 
+router.get("/rideHistory", async (req, res) => {
+  const riders = await RideHistory.find();
+  res.send(riders);
+});
+
+router.get("/userd", async (req, res) => {
+  const usersd = await User.find();
+  res.send(usersd);
+});
 // router.get("/apiUrl", (req, res) => {
 //   req =
 //     "https://eu1.locationiq.com/v1/reverse.php?key=6939bb17fa5a3e&lat=6.7932617&lon=79.8974264&format=json";

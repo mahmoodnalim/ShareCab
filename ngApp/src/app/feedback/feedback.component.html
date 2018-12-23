@@ -1,0 +1,98 @@
+<div class="container">
+  <form #f="ngForm" (ngSubmit)="submit(f.value)">
+
+    <h3>Give us a Feedback</h3>
+
+    <div class="form-group">
+      <!-- <label for="firstName">First Name</label> -->
+      <input  required
+              ngModel
+              name="firstName"
+              type="text" 
+              id="firstName" 
+              class="form-control"
+              #firstName="ngModel"
+              minlength="3"
+              placeholder="Your name.." 
+              >
+      <div class="alert alert-danger" 
+            *ngIf="firstName.touched && !firstName.valid">
+          <div *ngIf="firstName.errors.required">
+            First name is required!
+          </div>
+          <div *ngIf="firstName.errors.minlength">
+            First name should be minimum {{firstName.errors.minlength.requiredLength}} charactors!
+          </div>
+      </div>
+    </div>  
+      
+    <div class="form-group">
+      <label for="lastName">Last Name</label>
+      <input  required 
+              ngModel
+              name="lastName" 
+              type="text" 
+              id="lastName" 
+              class="form-control"
+              #lastName="ngModel"
+              minlength="3"
+              placeholder="Your last name.." 
+              >
+      <div class="alert alert-danger" 
+          *ngIf="lastName.touched && !lastName.valid">
+          <div *ngIf="firstName.errors.required">
+            last name is required!
+          </div>
+          <div *ngIf="firstName.errors.minlength">
+            last name should be minimum {{firstName.errors.minlength.requiredLength}} charactors!
+          </div>
+        </div>
+    </div>
+      
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input required 
+              ngModel
+              name="email" 
+              type="text" 
+              id="email" 
+              class="form-control"
+              #email="ngModel"
+              pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$"
+              placeholder="Your email.." 
+              >
+      <div class="alert alert-danger" 
+            *ngIf="email.touched && !email.valid">
+            <div *ngIf="email.errors.required">Email is required</div>
+            <div *ngIf="email.errors.pattern">Invalid Email</div>
+          </div>
+    </div>
+
+    <div class="form-group">
+          <label for="country">Country</label>
+          <select ngModel name="country" id="country" >
+              <option value=""></option>
+              <option *ngFor="let country of countries" [ngValue]="country">{{ country.name}}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="subject">Subject</label>
+      <textarea required
+            ngModel
+            name="subject"
+            class="form-control" 
+            id="subject" 
+            #subject="ngModel"
+            placeholder="Write Your Feedback.." 
+        ></textarea>
+      <div class="alert alert-danger" 
+            *ngIf="subject.touched && !subject.valid">
+            Subject is required!
+          </div>
+    </div>
+      
+    <button  class="btn btn-primary" [disabled]="!f.valid">Submit</button>
+
+  </form>
+</div> 

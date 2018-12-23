@@ -74,6 +74,13 @@
             >
             </agm-direction>
 
+            <agm-direction
+              *ngFor="let r of myRides.riders"
+              [origin]="r.origin"
+              [destination]="r.destination"
+            >
+            </agm-direction>
+
             <agm-marker
               *ngIf="destination.lat === null"
               [latitude]="lat"
@@ -98,8 +105,18 @@
           <p id="duration"></p>
           <p id="distance"></p>
         </div>
+        <ul>
+          <li *ngFor="let r of myRides.riders">
+            {{ r.userDetails.name }} <b>{{ r.userDetails.contact }}</b>
+          </li>
+        </ul>
       </div>
     </div>
+
+    <div *ngFor="let message of messages">{{ message }}</div>
+
+    <input [(ngModel)]="message" />
+    <button (click)="sendMessage()">Send</button>
     <!-- </div> -->
   </div>
 </div>

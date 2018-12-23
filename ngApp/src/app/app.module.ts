@@ -20,6 +20,14 @@ import { AuthDriverGuardService } from "./auth-driver-guard.service";
 import { AgmCoreModule } from "@agm/core";
 import { TokenInterceptorService } from "./token-interceptor.service";
 import { AgmDirectionModule } from "agm-direction";
+import { FeedbackComponent } from "./feedback/feedback.component";
+import { environment } from "src/environments/environment.prod";
+import { AngularFireModule } from "angularfire2";
+import { AngularFireDatabaseModule } from "angularfire2/database";
+import { FeedbackServiceService } from "./feedback-service.service";
+import { ChatComponent } from "./chat/chat.component";
+import { ChatService } from './chat.service';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -30,11 +38,18 @@ import { AgmDirectionModule } from "agm-direction";
     RiderComponent,
     UserHomeComponent,
     DriverHomeComponent,
-    HomeComponent
+    HomeComponent,
+    FeedbackComponent,
+    ChatComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
+    // AngularFireModule.initializaApp(environment.firebase,'dddd')
+    AngularFireModule.initializeApp(environment.firebase, "ShareCab"),
+    AngularFireDatabaseModule,
+
+    AngularFireModule.initializeApp(environment.firebaseConfig, "ChatApp"),
     ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
@@ -56,7 +71,10 @@ import { AgmDirectionModule } from "agm-direction";
     AuthService,
     EventService,
     AuthGuardService,
+    FeedbackServiceService,
     AuthDriverGuardService,
+    ChatService,
+
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptorService,

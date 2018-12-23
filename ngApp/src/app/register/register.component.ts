@@ -4,7 +4,7 @@ import { Router } from "@angular/router";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ErrorHandler, Injectable } from "@angular/core";
 import { HttpErrorResponse } from "@angular/common/http";
-
+import {HttpClient} from '@angular/common/http';
 @Component({
   selector: "app-register",
   templateUrl: "./register.component.html",
@@ -13,12 +13,12 @@ import { HttpErrorResponse } from "@angular/common/http";
 export class RegisterComponent implements OnInit {
   registrationFormGroup: FormGroup;
   passwordFormGroup: FormGroup;
-
+  selectedFile : null;
   // err
   ngOnInit() {}
 
   onClickRegister() {}
-
+  
   log(x) {
     console.log(x);
   }
@@ -33,7 +33,7 @@ export class RegisterComponent implements OnInit {
     isDriver: false
   };
 
-  constructor(private _auth: AuthService, private _router: Router) {}
+  constructor(private _auth: AuthService, private _router: Router,private http:HttpClient) {}
 
   registerUser(f) {
     this._auth.registerUser(this.registerUserData).subscribe(
@@ -52,5 +52,13 @@ export class RegisterComponent implements OnInit {
         this.error = err.error;
       }
     );
+  }
+
+
+  onFileSelected(event){
+    this.selectedFile = event.target.files[0]
+  }
+  onUpload(){
+    this.http.post
   }
 }

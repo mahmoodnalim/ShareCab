@@ -62,28 +62,51 @@
         <div class="w3-container w3-card w3-white w3-margin-bottom">
           <h5>Feeds</h5>
           <table class="table table-striped">
-            <tr *ngFor="let a of addr">
-            
-                <td>
+            <tr *ngFor="let a of addr" class="form-check">
+              <td>
+                <!--
                   <input
-                    type="checkbox"
-                   
-                   
-                  />
-                </td>
-                <td><i class="fa fa-user w3-text-blue w3-large"></i></td>
-                <td>
-                  {{ a.ud.firstName }} {{ a.ud.lastName }} {{ a.ud.contact }}
-                </td>
-                <td>{{ a.od.results[0].formatted_address }}</td>
-                <td>{{ a.dd.results[0].formatted_address }}</td>
-              
+                  type="checkbox"
+                -->
+                <input
+                  class="form-check-input"
+                  [(ngModel)]="a.isChecked"
+                  name="{{ a}}"
+                  type="checkbox"
+                  (change)="onChangeCategory($event.target.checked, a)"
+                />
+                <!--
+                  <label class="form-check-label" for="{{a.name}}">
+                    {{ a.name }}
+                  </label>
+                  id="{{a}}"
+                -->
+
+                <!-- /> -->
+              </td>
+              <td><i class="fa fa-user w3-text-blue w3-large"></i></td>
+              <td>
+                {{ a.ud.firstName }} {{ a.ud.lastName }} {{ a.ud.contact }}
+              </td>
+              <td>{{ a.od.results[0].formatted_address }}</td>
+              <td>
+                {{ a.dd.results[0].formatted_address }} ({{
+                  a.isPrivate ? "Private" : "Shared"
+                }})
+              </td>
             </tr>
           </table>
         </div>
 
         <!-- </div> -->
       </div>
+      <button *ngIf="!isDriving" class="btn btn-primary" (click)="onClicked()">
+        Confirm
+      </button>
+      <h2 *ngIf="isDriving">You are Now on your Drive</h2>
+      <button class="btn btn-primary" *ngIf="isDriving" (click)="deleteRide()">
+        End your drive
+      </button>
     </div>
   </div>
 </div>

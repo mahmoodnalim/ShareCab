@@ -12,6 +12,9 @@ import { MapsAPILoader, AgmMap } from "@agm/core";
 export class DriverHomeComponent implements OnInit {
   lat: number = null;
   lng: number = null;
+  riders = [];
+  isDriving = false;
+  currentRide = null;
   // lats = 36;
   // lons = -94;
   addr = [];
@@ -62,7 +65,16 @@ export class DriverHomeComponent implements OnInit {
                     console.log(dd);
                     this.authService.getOneUser(r.user).subscribe(
                       ud => {
-                        this.addr.push({ od, dd, ud });
+                        // console.log("id", res);
+                        this.addr.push({
+                          od,
+                          dd,
+                          ud,
+                          r,
+                          _id: r._id,
+                          isChecked: false,
+                          isPrivate: r.isPrivate
+                        });
                       },
                       err => {
                         console.log(err);
@@ -91,6 +103,96 @@ export class DriverHomeComponent implements OnInit {
       },
       err => {
         console.log(err);
+      }
+    );
+  }
+  onChangeCategory(isChecked, a: any) {
+    // Use appropriate model type instead of any
+
+    if (isChecked) {
+      this.riders.push(a);
+      console.log(this.riders);
+    } else {
+      let index = this.riders.indexOf(a);
+      this.riders.splice(index, 1);
+    }
+  }
+  onClicked() {
+    this.isDriving = true;
+    let did = this.authService.getCurrentUser().uid;
+    let name = this.authService.getCurrentUser().name;
+    let contact = this.authService.getCurrentUser().contact;
+    const obj = {
+      driver: {
+        did,
+        name,
+        contact
+      },
+      riders: this.riders.map(({ r }) => ({
+        uid: r.user,
+        userDetails: {
+          name: r.userDetails.name,
+          contact: r.userDetails.contact
+        },
+        origin: { lat: r.origin.lat, lng: r.origin.lng },
+        destination: { lat: r.destination.lat, lng: r.destination.lng }
+      })),
+      // origins: this.riders.map(({ r }) => ({
+      //   lat: r.origin.lat,
+      //   lng: r.origin.lng,
+      //   uid: r.user
+      // })),
+      // destinations: this.riders.map(({ r }) => ({
+      //   lat: r.destination.lat,
+      //   lng: r.destination.lng,
+      //   uid: r.user
+      // })),
+      price: 100
+    };
+    console.log(obj);
+    this.authService.postRides(obj).subscribe(
+      res => {
+        console.log(res);
+        this.currentRide = res;
+      },
+      err => {
+        console.log(err.error);
+      }
+    );
+  }
+  deleteRide() {
+    this.isDriving = false;
+    this.authService.deleteRides(this.currentRide._id).subscribe(
+      res => {
+        console.log(res);
+        this.currentRide = null;
+      },
+      err => {
+        console.log(err);
+      }
+    );
+    // this.authService
+    //   .deleteRider(this.riders.join("-"))
+    //   .subscribe(res => console.log(res), err => console.log(err));
+    this.riders.forEach(r => {
+      // console.log("rr", r);
+      this.authService.deleteRider(r._id).subscribe(
+        res => {
+          console.log(res);
+          const index = this.riders.indexOf(r);
+          this.riders.splice(index, 1);
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    });
+    this.authService.postRideHistory(this.currentRide).subscribe(
+      res => {
+        console.log(res);
+      },
+      err => {
+        console.log(err.error);
       }
     );
   }
