@@ -13,6 +13,7 @@ var fs = require("fs");
 
 // require("./startup/prod")(app);
 app.use(cors());
+api.use(cors());
 
 // io.on("connection", socket => {
 //   console.log("user connected");

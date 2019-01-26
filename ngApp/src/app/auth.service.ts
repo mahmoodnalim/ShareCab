@@ -15,6 +15,7 @@ export class AuthService {
   private _rideUrl = "http://localhost:3000/api/ridesd/";
   private _rideHistory = "http://localhost:3000/api/rideHistory/";
   private _userdUrl = "http://localhost:3000/api/userd/";
+  private _promoUrl = "http://localhost:3000/api/addPromo/";
   // private _registerUrl = "https://sharecab123.herokuapp.com/api/register";
   // private _loginUrl = "https://sharecab123.herokuapp.com/api/login";
 
@@ -92,6 +93,14 @@ export class AuthService {
 
   getUserDetails() {
     return this.http.get(this._userdUrl);
+  }
+
+  addPromo(userId){
+    return this.http.put(this._promoUrl,{id:userId});
+  }
+
+  getPromo(){
+    return this.http.get(this._promoUrl);
   }
   // getPrice() {
   //   return this.http.get(

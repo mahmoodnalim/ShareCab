@@ -11,7 +11,9 @@ const userSchema = new Schema({
   },
   password: String,
   contact: String,
-  isDriver: Boolean
+  isDriver: Boolean,
+  isPromo: Boolean,
+ // proPic: String
 });
 
 module.exports = mongoose.model("user", userSchema, "users");

@@ -19,14 +19,16 @@ const ridesSchema = new Schema({
         },
         userDetails: {
           type: {
+            price: Number,
             name: String,
-            contact: String
+            contact: String,
+            isPromo: Boolean
           }
         },
         uid: { type: mongoose.Schema.Types.ObjectId, ref: "user" }
       }
     ]
-  },
+  }
 
   // origins: {
   //   type: [
@@ -48,7 +50,6 @@ const ridesSchema = new Schema({
   //   ],
   //   ref: "user"
   // },
-  price: { type: Number, required: true }
 });
 
 module.exports = mongoose.model("rides", ridesSchema, "ridesData");

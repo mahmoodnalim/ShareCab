@@ -55,12 +55,54 @@
         <div class="w3-third">
           <div class="w3-white w3-text-grey w3-card-4">
             <div class="w3-display-container">
-              <img src="/img/2.jpg" style="width:100%" alt="Avatar" />
-              <div class="w3-display-bottomleft w3-container w3-text-black">
-                <h1>{{ userdetails.firstName }}</h1>
+              <!-- <img [src]="userdetails.proPic" style="width:100%" alt="Avatar" /> -->
+
+              <div class="form-group">
+                <label>Profile Photo</label>
+                <img [src]="imageUrl" style="width: 250px;height: 200px" />
+                <input
+                  type="file"
+                  #image
+                  accept="image/*"
+                  (change)="onUpload($event)"
+                />
+                <!-- <button type="button" (click)="onUpload($event)">Upload</button> -->
               </div>
+
+              <!-- <button
+                
+                type="button"
+                (click)="featuredInput1.click()"
+              >
+                Change
+              </button>
+
+              <img
+                src="{{ url }}"
+              
+               
+              />
+
+              <input
+                #featuredInput1
+                style="display: none;"
+                type="file"
+                value="upload"
+                id="fileButton"
+                (change)="onFileSelected($event)"
+              /> -->
+
+              <!-- <div class="w3-display-bottomleft w3-container w3-text-black">
+                <h1>{{ userdetails.firstName }}</h1>
+              </div> -->
             </div>
             <div class="w3-container">
+              <p>
+                <i
+                  class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-teal"
+                ></i
+                >{{ userdetails.firstName }}
+              </p>
               <p>
                 <i
                   class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-teal"
@@ -304,19 +346,19 @@
     </div>
 
     <footer class="w3-container w3-teal w3-center w3-margin-top">
-      <p>Find me on social media.</p>
+      <p>Find us on social media.</p>
       <i class="fa fa-facebook-official w3-hover-opacity"></i>
       <i class="fa fa-instagram w3-hover-opacity"></i>
       <i class="fa fa-snapchat w3-hover-opacity"></i>
       <i class="fa fa-pinterest-p w3-hover-opacity"></i>
       <i class="fa fa-twitter w3-hover-opacity"></i>
       <i class="fa fa-linkedin w3-hover-opacity"></i>
-      <p>
+      <!-- <p>
         Powered by
-        <a href="https://www.w3schools.com/w3css/default.asp" target="_blank"
-          >w3.css</a
+       
+          >ShareCab</a
         >
-      </p>
+      </p> -->
     </footer>
   </body>
 </html>

@@ -91,12 +91,14 @@
         </div>
       </div>
       <div class="col-md-4" *ngIf="destination.lat">
-        <button class="btn btn-primary" (click)="getDetails(false)">
-          Request Shared Ride
-        </button>
-        <button class="btn btn-primary" (click)="getDetails(true)">
-          Request Private Ride
-        </button>
+        <div class="btn-group" *ngIf="!loading">
+          <button class="btn btn-primary" (click)="getDetails(false)">
+            Request Shared Ride
+          </button>
+          <button class="btn btn-primary" (click)="getDetails(true)">
+            Request Private Ride
+          </button>
+        </div>
         <div
           [hidden]="!showDetails"
           class="bg-primary text-light p-3"
@@ -106,17 +108,48 @@
           <p id="distance"></p>
         </div>
         <ul>
-          <li *ngFor="let r of myRides.riders">
-            {{ r.userDetails.name }} <b>{{ r.userDetails.contact }}</b>
+          <table>
+            <tr>
+              <th>Firstname</th>
+              <th>Contact</th>
+              <th>Price</th>
+            </tr>
+            <tr></tr>
+            <tr *ngFor="let r of myRides.riders">
+              <td>{{ r.userDetails.name }}</td>
+              <td>{{ r.userDetails.contact }}</td>
+              <td>{{ r.userDetails.price }}</td>
+            </tr>
+          </table>
+
+          <button
+            (click)="onPromoClick()"
+            class="btn btn-success"
+            *ngIf="isPromo"
+          >
+            Get Promotions
+          </button>
+          <span *ngIf="price" class="badge badge-success">
+            new price {{ price }}</span
+          >
+        </ul>
+
+        <ul>
+          <li class="text" *ngFor="let item of items | async">
+             {{item.name}}
           </li>
         </ul>
+        
+        <button (click)="deleteRide()" class="btn btn-success">
+          Cancel Ride
+        </button>
       </div>
     </div>
 
-    <div *ngFor="let message of messages">{{ message }}</div>
+    <!-- <div *ngFor="let message of messages">{{ message }}</div>
 
     <input [(ngModel)]="message" />
-    <button (click)="sendMessage()">Send</button>
+    <button (click)="sendMessage()">Send</button> -->
     <!-- </div> -->
   </div>
 </div>

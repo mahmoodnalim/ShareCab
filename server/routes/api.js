@@ -86,10 +86,13 @@ router.post("/register", (req, res) => {
         console.log(error);
       } else {
         let payload = {
-          uid: fuser._id,
-          name: fuser.firstName + " " + fuser.lastName,
-          isDriver: fuser.isDriver,
-          email: fuser.email
+          uid: user._id,
+          name: user.firstName + " " + user.lastName,
+          isDriver: user.isDriver,
+          email: user.email,
+          contact: user.contact,
+          isPromo: user.isPromo,
+        //  proPic: user.proPic
         };
         let token = jwt.sign(payload, "secretKey");
         res.status(200).send({ token });
@@ -97,6 +100,8 @@ router.post("/register", (req, res) => {
     });
   });
 });
+
+router.post("/image");
 
 // `router.post('/rider', (req, res) => {
 //     let riderData = req.body
@@ -144,7 +149,9 @@ router.post("/login", (req, res) => {
           name: user.firstName + " " + user.lastName,
           isDriver: user.isDriver,
           email: user.email,
-          contact: user.contact
+          contact: user.contact,
+          isPromo: user.isPromo,
+        //  proPic: user.proPic
         };
         let token = jwt.sign(payload, "secretKey");
         res.status(200).send({ token });
@@ -206,7 +213,7 @@ router.post("/rides", async (req, res) => {
 });
 
 router.get("/rides", async (req, res) => {
-  const riders = await Rider.find();
+  const riders = await Rider.find().sort("-distance");
   res.send(riders);
 });
 
@@ -270,6 +277,16 @@ router.post("/rideHistory", async (req, res) => {
 router.get("/rideHistory", async (req, res) => {
   const riders = await RideHistory.find();
   res.send(riders);
+});
+
+router.put("/addPromo", async (req, res) => {
+  const promo = await User.findByIdAndUpdate(req.body.id, { isPromo: true });
+  res.send("promo added");
+});
+
+router.get("/addPromo", async (req, res) => {
+  const isPromo = await User.find("isPromo");
+  res.send(isPromo);
 });
 
 router.get("/userd", async (req, res) => {

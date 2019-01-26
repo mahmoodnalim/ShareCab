@@ -1,43 +1,45 @@
 <h2>Welcome to <strong>ShareCab Admins</strong></h2>
 <div class="alert alert-warning alert-dismissible fade show" role="alert">
   <nav class="navbar navbar-light bg-light">
+      <div class="tab">
     <div class="btn-group">
       <button
-        (click)="displayUserHistory2()"
-        class="btn btn-outline-success btn-lg"
+        (click)="displayUserHistory2() ; openCity(event, '1')"
+        class="btn btn-outline-success btn-lg tablinks"
         type="button"
       >
         Registered Users
       </button>
       <br />
       <button
-        (click)="displayUserHistory1()"
-        class="btn btn-outline-success btn-lg"
+        (click)="displayUserHistory1() ; openCity(event, '2')"
+        class="btn btn-outline-success btn-lg tablinks"
         type="button"
       >
         Registered Drivers
       </button>
       <br />
       <button
-        (click)="dispalyRideHistory()"
-        class="btn btn-lg btn-outline-secondary"
+        (click)="dispalyRideHistory() ;openCity(event, '3')"
+        class="btn btn-lg btn-outline-secondary tablinks"
         type="button"
       >
         Check Ride History
       </button>
       <br />
       <button
-        (click)="displayData()"
-        class="btn btn-lg btn-outline-secondary"
+        (click)="displayData() ; openCity(event, '4')"
+        class="btn btn-lg btn-outline-secondary tablinks"
         type="button"
       >
         Check Feedbacks
       </button>
     </div>
+    </div>
   </nav>
 </div>
 <hr />
-<table class="table table-striped" *ngIf="feedback">
+<table id="4" class="table table-striped tabcontent" *ngIf="feedback">
   <tr>
     <th>User</th>
     <th>Country</th>
@@ -54,7 +56,7 @@
   </tr>
 </table>
 
-<table class="table table-striped" *ngIf="history">
+<table id="3" class="table table-striped" *ngIf="history">
   <tr>
     <th>Driver</th>
     <th>Riders</th>
@@ -73,7 +75,7 @@
   </tr>
 </table>
 
-<table class="table table-striped" *ngIf="userDetails1">
+<table id="2" class="table table-striped" *ngIf="userDetails1">
   <tr>
     <th>Name</th>
     <th>Contact</th>
@@ -86,15 +88,18 @@
   </tr>
 </table>
 
-<table class="table table-striped" *ngIf="userDetails2">
+<table id="1" class="table table-striped" *ngIf="userDetails2">
   <tr>
     <th>Name</th>
     <th>Contact</th>
     <th>Email</th>
+    <th></th>
   </tr>
+
   <tr *ngFor="let e of userDetails2">
     <td *ngIf="!e.isDriver">{{ e.firstName }} {{ e.lastName }}</td>
     <td *ngIf="!e.isDriver">{{ e.contact }}</td>
     <td *ngIf="!e.isDriver">{{ e.email }}</td>
+    <button *ngIf = "!e.isPromo" class="btn btn-success" (click)="addPromo(e._id)">Add Promotion</button>>
   </tr>
 </table>

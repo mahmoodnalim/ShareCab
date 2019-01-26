@@ -15,7 +15,20 @@ import { AgmDirectionModule } from "agm-direction";
 import { AuthService } from "../auth.service";
 import { RiderComponent } from "../rider/rider.component";
 import { ChatService } from "../chat.service";
+//import { AngularFirestore } from "angularfire2/firestore";
+
+//import {AngularFireModule} from 'angularfire2';
+// for auth
+import { AngularFireAuthModule } from "angularfire2/auth";
+// for database
+//import { AngularFireDatabaseModule } from "angularfire2/database";
 //import { } from 'googlemaps';
+import { AngularFireAuth } from "angularfire2/auth";
+// for database
+import { AngularFireDatabase } from "angularfire2/database";
+// for Observables
+import { AngularFireList, AngularFireObject } from "angularfire2/database";
+import { Observable } from "rxjs";
 declare var google: any;
 @Component({
   selector: "app-user-home",
@@ -23,15 +36,26 @@ declare var google: any;
   styleUrls: ["./user-home.component.css"]
 })
 export class UserHomeComponent implements OnInit {
+  items: AngularFireList<any>;
+  name: any;
+  msgVal: string = "";
   message: string;
   messages: string[] = [];
   title = "app works!";
+  distance: number = null;
   lat: number = null;
   lng: number = null;
   zoom: number = 4;
   showDetails = false;
   myRides: any;
   myRides = { riders: [] };
+  price: number;
+  loading = false;
+  result: any;
+  isPromo: Boolean;
+  discount: number;
+  isDriving = false;
+  rideId: any;
   //origin = { lat: this.lat, lng: this.lng };
   destination = { lat: null, lng: null };
   public searchControl: FormControl;
@@ -40,11 +64,13 @@ export class UserHomeComponent implements OnInit {
   public searchElementRef: ElementRef;
 
   constructor(
+    // public af: AngularFireDatabase,
     private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone,
-    private authService: AuthService
-  ) // private chatService: ChatService
-  {}
+    private authService: AuthService // db: AngularFirestore // private chatService: ChatService
+  ) {
+    //this.items = af.database.list<items>('items').valueChanges().subscribe(console.log);
+  }
 
   // sendMessage() {
   //   this.chatService.sendMessage(this.message);
@@ -55,7 +81,7 @@ export class UserHomeComponent implements OnInit {
     // this.chatService.getMessages().subscribe((message: string) => {
     //   this.messages.push(message);
     // });
-
+    this.isPromo = this.authService.getCurrentUser().isPromo;
     navigator.geolocation.getCurrentPosition(
       position => {
         this.lat = position.coords.latitude;
@@ -95,6 +121,7 @@ export class UserHomeComponent implements OnInit {
     });
   }
   getDetails(isPrivate) {
+    this.loading = true;
     console.log(isPrivate);
     this.showDetails = true;
     this.calculateDistance();
@@ -102,43 +129,109 @@ export class UserHomeComponent implements OnInit {
     this.authService
       .postRiders({
         origin: { lat: this.lat, lng: this.lng },
-        destination: { lat: this.destination.lat, lng: this.destination.lng },
+        destination: {
+          lat: this.destination.lat,
+          lng: this.destination.lng
+        },
         user: this.authService.getCurrentUser().uid,
         userDetails: {
           name: this.authService.getCurrentUser().name,
 
+          isPromo: this.authService.getCurrentUser().isPromo,
           contact: this.authService.getCurrentUser().contact
         },
-        isPrivate
+        isPrivate,
+        distance: this.distance
       })
       .subscribe(
-        res => {
+        (res: any) => {
           console.log(res);
-          this.authService.getRiders().subscribe(
-            res => {
-              console.log(res);
-            },
-            err => {
-              console.log(err);
-            }
+          this.rideId = res._id;
+          const interval = setInterval(
+            () =>
+              this.authService.getMyRides().subscribe(res => {
+                console.log("getRides", res);
+                if (res) {
+                  clearInterval(interval);
+                  this.myRides = res;
+                }
+              }),
+            5000
           );
+
+          // setTimeout(
+          //   () =>
+          //     this.authService.getRiders().subscribe(
+          //       res => {
+          //         if (res) {
+          //           this.myRides = res;
+          //         }
+          //         console.log(res);
+          //       },
+          //       err => {
+          //         console.log(err);
+          //       }
+          //     ),
+          //   45000
+          // );
         },
         err => {
           console.log(err);
         }
       );
-    const requestInterval = setInterval(() => {
-      this.authService.getMyRides().subscribe(
+    // const requestInterval = setInterval(() => {
+    //   this.authService.getMyRides().subscribe(
+    //     res => {
+    //       console.log(res);
+    //       if (res) this.myRides = res;
+    //       if (this.myRides) clearInterval(requestInterval);
+    //     },
+    //     err => {
+    //       console.log(err);
+    //     }
+    //   );
+    // }, 500);
+  }
+
+  deleteRide() {
+    this.isDriving = false;
+    this.authService.deleteRides(this.myRides._id).subscribe(
+      res => {
+        console.log(res);
+        // this.myRides._id = null;
+      },
+      err => {
+        console.log(err);
+      }
+    );
+    // this.authService
+    //   .deleteRider(this.riders.join("-"))
+    //   .subscribe(res => console.log(res), err => console.log(err));
+    this.myRides.riders.forEach(r => {
+      console.log("rr", r);
+
+      this.authService.deleteRider(r._id).subscribe(
         res => {
           console.log(res);
-          if (res) this.myRides = res;
-          if (this.myRides) clearInterval(requestInterval);
+          // const index = this.myRides.riders.indexOf(r);
+          // this.myRides.riders.splice(index, 1);
         },
         err => {
           console.log(err);
         }
       );
-    }, 500);
+    });
+    // this.myRides = { riders: [] };
+  }
+  getPromo() {
+    this.authService.getPromo().subscribe(
+      res => {
+        console.log(res);
+      },
+      err => {
+        console.log(err);
+      }
+    );
   }
 
   calculateDuration() {
@@ -182,12 +275,19 @@ export class UserHomeComponent implements OnInit {
 
   calculateDistance() {
     // console.log(google.maps.geometry.spherical.computeDurationBetween());
-    var distance = google.maps.geometry.spherical.computeDistanceBetween(
+    this.distance = google.maps.geometry.spherical.computeDistanceBetween(
       new google.maps.LatLng(this.lat, this.lng),
       new google.maps.LatLng(this.destination.lat, this.destination.lng)
     );
-    console.log(distance);
-    document.getElementById("distance").innerHTML = distance / 1000 + "km";
+    console.log(this.distance);
+    document.getElementById("distance").innerHTML = this.distance / 1000 + "km";
+  }
+  onPromoClick() {
+    // if(this.authService.getCurrentUser().uid == this.authService.getRiders())
+    const user = this.myRides.riders.find(
+      obj => obj.uid === this.authService.getCurrentUser().uid
+    );
+    this.price = user.userDetails.price - user.userDetails.price * 0.1;
   }
   // calculateDuration() {
   //   var service = new google.maps.DistanceMatrixService();

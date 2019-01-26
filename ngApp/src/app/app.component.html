@@ -56,9 +56,21 @@
             Drive
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="#">Overview</a>
-            <a class="dropdown-item" href="#">How it Works</a>
-            <a class="dropdown-item" href="#">Business</a>
+            <a
+              class="dropdown-item"
+              routerLink="/overvies"
+              routerLinkActive="active"
+              href="#"
+              >Overview</a
+            >
+            <a
+              class="dropdown-item"
+              routerLink="/howitworks"
+              routerLinkActive="active"
+              href="#"
+              >How it Works</a
+            >
+            <!-- <a class="dropdown-item" href="#">Business</a> -->
           </div>
         </li>
         <li *ngIf="!auth.getCurrentUser()" class="nav-item">

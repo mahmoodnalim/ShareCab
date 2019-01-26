@@ -24,9 +24,17 @@ import { FeedbackComponent } from "./feedback/feedback.component";
 import { environment } from "src/environments/environment.prod";
 import { AngularFireModule } from "angularfire2";
 import { AngularFireDatabaseModule } from "angularfire2/database";
+import { AngularFireStorageModule } from "angularfire2/storage";
+import { AngularFirestoreModule } from "angularfire2/firestore";
+import { AngularFireAuthModule } from "angularfire2/auth";
+//import {AngularFireStoreModule} from "angularfire2/firestore"
 import { FeedbackServiceService } from "./feedback-service.service";
-import { ChatComponent } from "./chat/chat.component";
-import { ChatService } from './chat.service';
+//import { ChatComponent } from "./chat/chat.component";
+import { ChatService } from "./chat.service";
+import { OverviesComponent } from "./overvies/overvies.component";
+import { HowitworksComponent } from "./howitworks/howitworks.component";
+//import { DbService } from "./services/db.service";
+//import { AuthService1 } from "./services/_auth.service";
 
 @NgModule({
   declarations: [
@@ -40,7 +48,9 @@ import { ChatService } from './chat.service';
     DriverHomeComponent,
     HomeComponent,
     FeedbackComponent,
-    ChatComponent
+    // ChatComponent,
+    OverviesComponent,
+    HowitworksComponent
   ],
   imports: [
     BrowserModule,
@@ -48,8 +58,10 @@ import { ChatService } from './chat.service';
     // AngularFireModule.initializaApp(environment.firebase,'dddd')
     AngularFireModule.initializeApp(environment.firebase, "ShareCab"),
     AngularFireDatabaseModule,
-
-    AngularFireModule.initializeApp(environment.firebaseConfig, "ChatApp"),
+    AngularFireStorageModule,
+    AngularFirestoreModule,
+    //AngularFireStoreModule,
+    // AngularFireModule.initializeApp(environment.firebaseConfig, "ChatApp"),
     ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
@@ -74,7 +86,8 @@ import { ChatService } from './chat.service';
     FeedbackServiceService,
     AuthDriverGuardService,
     ChatService,
-
+    //  AuthService1,
+    // DbService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptorService,

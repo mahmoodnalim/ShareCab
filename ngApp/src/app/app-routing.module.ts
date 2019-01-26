@@ -11,10 +11,20 @@ import { HomeComponent } from "./home/home.component";
 import { AuthGuardService } from "./auth-guard.service";
 import { AuthDriverGuardService } from "./auth-driver-guard.service";
 import { FeedbackComponent } from "./feedback/feedback.component";
+import { OverviesComponent } from "./overvies/overvies.component";
+import { HowitworksComponent } from "./howitworks/howitworks.component";
 const routes: Routes = [
   {
     path: "",
     component: HomeComponent
+  },
+  {
+    path: "overvies",
+    component: OverviesComponent
+  },
+  {
+    path: "howitworks",
+    component: HowitworksComponent
   },
   {
     path: "events",

@@ -11,3 +11,49 @@
       </div>
   </div>
 -->
+
+<!-- <div class="aroundStuff">
+  <p class="spons">Chat Application made by <a href="http://baldura.com/">Baldur Arge</a></p>
+  <main *ngIf="user">
+    <section class="chatHead">
+      <h1>{{user.displayName}}</h1>
+    </section>
+    <section class="messages" id="messageDiv">
+      <div *ngFor="let message of messages | async">
+        <div *ngIf="yourMessage(message)" class="each-message yourMessage">
+          <span>{{message.name}}</span>
+          <p>{{message.message}}</p>
+        </div>
+        <div *ngIf="!yourMessage(message)" class="each-message">
+          <span>{{message.name}}</span>
+          <p>{{message.message}}</p>
+        </div>
+
+      </div>
+
+      <div class="" id="placeholder">
+      </div>
+    </section>
+    <section class="chatBottom">
+      <form class="" action="" method="" (ngSubmit)="onSubmitMessage($event)">
+        <input type="text" name="chatMessage" value="" placeholder="Message" [(ngModel)]="message">
+        <button type="submit" name="button"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+      </form>
+    </section>
+    <div class="test">
+
+    </div>
+  </main>
+
+  <main *ngIf="!user">
+    <h1 class="nameh1">Please Set Your Name</h1>
+    <form class="signupForm" action="" method="" (ngSubmit)="onSubmit($event)">
+      <input type="text" name="userName" value="" placeholder="Name" [(ngModel)]="name">
+      <button type="submit" name="button">Lets Chat</button>
+    </form>
+  </main>
+</div>
+
+<div class="loading" *ngIf="!ready">
+  <div class="loader">Loading...</div>
+</div> -->
