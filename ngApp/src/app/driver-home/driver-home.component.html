@@ -64,6 +64,21 @@
       <div class="w3-twothird">
         <div class="w3-container w3-card w3-white w3-margin-bottom">
           <h5>Feeds</h5>
+
+          <div>
+            <button
+              [ngClass]="{
+                'btn-success': isAvailable,
+                'btn-danger': !isAvailable
+              }"
+              (click)="toggleAvailable()"
+              class="btn"
+            >
+              Make Me {{ !isAvailable ? "Available" : "Un Available" }}
+            </button>
+            <!-- <p class="text-info">{{isAvailable? "You are"}}</p> -->
+          </div>
+
           <table class="table table-striped">
             <tr *ngFor="let a of addr" class="form-check">
               <td>
@@ -109,11 +124,11 @@
       <button class="btn btn-primary" *ngIf="isDriving" (click)="deleteRide1()">
         Cancel your drive
       </button>
-      <ul>
-        <li class="text" *ngFor="let item of items | async">
-           {{item.name}}
+      <!-- <ul>
+        <li class="text" *ngFor="let item of (items | async)">
+          {{ item.name }}
         </li>
-      </ul>
+      </ul> -->
 
       <h2 *ngIf="isDriving">You are Now on your Drive</h2>
 

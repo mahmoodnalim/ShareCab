@@ -9,7 +9,9 @@ const ridesSchema = new Schema({
       contact: String
     }
   },
+   isConfirmed:Boolean,
   riders: {
+
     type: [
       {
         origin: { lat: Number, lng: Number },
@@ -25,6 +27,7 @@ const ridesSchema = new Schema({
             isPromo: Boolean
           }
         },
+        isConfirmed: Boolean,
         uid: { type: mongoose.Schema.Types.ObjectId, ref: "user" }
       }
     ]

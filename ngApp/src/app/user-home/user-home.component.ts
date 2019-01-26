@@ -59,7 +59,9 @@ export class UserHomeComponent implements OnInit {
   //origin = { lat: this.lat, lng: this.lng };
   destination = { lat: null, lng: null };
   public searchControl: FormControl;
-
+  drivers = [];
+  isConfirmed = null;
+  showConfirmedBtn = false;
   @ViewChild("search")
   public searchElementRef: ElementRef;
 
@@ -114,6 +116,20 @@ export class UserHomeComponent implements OnInit {
           this.destination.lat = place.geometry.location.lat();
           this.destination.lng = place.geometry.location.lng();
           console.log(this.destination);
+          // Get Cureetn drivers
+
+          this.authService.getADriver().subscribe(
+            (res: any[]) => {
+              if (res.length !== 0) res[0].isSelected = true;
+              this.drivers = res;
+
+              console.log(res);
+            },
+            err => {
+              console.log(err);
+            }
+          );
+
           // this.calculateDistance();
         });
         [];
@@ -121,6 +137,7 @@ export class UserHomeComponent implements OnInit {
     });
   }
   getDetails(isPrivate) {
+    // this.drivers = [];
     this.loading = true;
     console.log(isPrivate);
     this.showDetails = true;
@@ -134,6 +151,7 @@ export class UserHomeComponent implements OnInit {
           lng: this.destination.lng
         },
         user: this.authService.getCurrentUser().uid,
+        driver: this.drivers.find(d => d.isSelected).driver,
         userDetails: {
           name: this.authService.getCurrentUser().name,
 
@@ -153,6 +171,7 @@ export class UserHomeComponent implements OnInit {
                 console.log("getRides", res);
                 if (res) {
                   clearInterval(interval);
+                  this.showConfirmedBtn = true;
                   this.myRides = res;
                 }
               }),
@@ -192,6 +211,30 @@ export class UserHomeComponent implements OnInit {
     //   );
     // }, 500);
   }
+
+  confirmRides(isConfirmed){
+     this.authService.userConfirmRide(this.myRides._id,{isConfirmed, uid: this.authService.getCurrentUser().uid}).subscribe(
+       res=>{
+         // TODO: create interval to get driver confirm
+         const rideInterval = setInterval(()=>{
+          this.authService.getOneRide(this.myRides._id).subscribe(
+            res=>{
+              this.myRides = res;
+              console.log(res);
+            }),
+            err=>{
+              console.log(err);
+            }
+        },1000)
+        if(this.myRides.isConfirmed) clearInterval(rideInterval);
+         console.log(res);
+       },
+       err=>{
+         console.log(err);
+       }
+     );
+  }
+
 
   deleteRide() {
     this.isDriving = false;
@@ -289,6 +332,14 @@ export class UserHomeComponent implements OnInit {
     );
     this.price = user.userDetails.price - user.userDetails.price * 0.1;
   }
+
+  driverSelect(id) {
+    this.drivers.forEach(f => {
+      f.isSelected = false;
+      if (f._id === id) f.isSelected = true;
+    });
+  }
+
   // calculateDuration() {
   //   var service = new google.maps.DistanceMatrixService();
   //   var or = new google.maps.LatLng(this.lat, this.lng);

@@ -20,6 +20,7 @@ export class DriverHomeComponent implements OnInit {
   totalDistance;
   isDriving = false;
   currentRide = null;
+
   // lats = 36;
   // lons = -94;
   addr = [];
@@ -27,12 +28,26 @@ export class DriverHomeComponent implements OnInit {
   contentString;
   zoom: number = 4;
   destination = { lat: null, lng: null };
+  isAvailable = false;
+
   // items:Observable<any[]>;
   constructor(private authService: AuthService) {
     // this.items = db.collection('items').valueChanges();
   }
 
   ngOnInit() {
+    this.authService.getOneADriver().subscribe(
+      res => {
+        if (res) {
+          this.isAvailable = true;
+        }
+        console.log(res);
+      },
+      err => {
+        console.log(err);
+      }
+    );
+
     navigator.geolocation.getCurrentPosition(
       position => {
         this.lat = position.coords.latitude;
@@ -60,7 +75,7 @@ export class DriverHomeComponent implements OnInit {
     // );
     this.authService.getRiders().subscribe(
       (res: [any]) => {
-        this.maxDistance = res[0].distance;
+        if (res.length !== 0) this.maxDistance = res[0].distance;
         this.totalDistance = res.reduce((a, b) => a + b.distance, 0) / 1000;
 
         console.log(res);
@@ -139,6 +154,7 @@ export class DriverHomeComponent implements OnInit {
         name,
         contact
       },
+      isConfirmed: null,
       riders: this.riders.map(({ r }) => {
         // r.distance;
         console.log(this.calculatePrice(r.distance, r.isPrivate));
@@ -151,6 +167,7 @@ export class DriverHomeComponent implements OnInit {
             contact: r.userDetails.contact,
             isPromo: r.userDetails.isPromo
           },
+          isConfirmed: null,
           origin: { lat: r.origin.lat, lng: r.origin.lng },
           destination: { lat: r.destination.lat, lng: r.destination.lng }
         };
@@ -168,9 +185,19 @@ export class DriverHomeComponent implements OnInit {
     };
     console.log(obj);
     this.authService.postRides(obj).subscribe(
-      res => {
-        console.log(res);
-        this.currentRide = res;
+      res1 => {
+        this.currentRide = res1;
+        console.log(res1);
+        const rideInterval = setInterval(() => {
+          this.authService.getOneRide(this.currentRide._id).subscribe(res2 => {
+            if (res2) this.currentRide = res2;
+            console.log(res2);
+          }),
+            err => {
+              console.log(err);
+            };
+        }, 1000);
+        if (this.currentRide.isConfirmed) clearInterval(rideInterval);
       },
       err => {
         console.log(err.error);
@@ -251,5 +278,35 @@ export class DriverHomeComponent implements OnInit {
         }
       );
     });
+  }
+
+  toggleAvailable() {
+    if (this.isAvailable) {
+      this.authService.deleteADriver().subscribe(
+        res => {
+          console.log(res);
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    } else {
+      this.authService
+        .postADriver({
+          driver: this.authService.getCurrentUser().uid,
+          name: this.authService.getCurrentUser().name,
+          contact: this.authService.getCurrentUser().contact,
+          origin: { lat: this.lat, lng: this.lng }
+        })
+        .subscribe(
+          res => {
+            console.log(res);
+          },
+          err => {
+            console.log(err);
+          }
+        );
+    }
+    this.isAvailable = !this.isAvailable;
   }
 }

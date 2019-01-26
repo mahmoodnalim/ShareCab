@@ -87,11 +87,23 @@
               [longitude]="lng"
               iconUrl="images/as.png"
             ></agm-marker>
+
+            <agm-marker
+              *ngFor="let d of drivers"
+              [latitude]="d.origin.lat"
+              [longitude]="d.origin.lng"
+            ></agm-marker>
           </agm-map>
         </div>
       </div>
       <div class="col-md-4" *ngIf="destination.lat">
-        <div class="btn-group" *ngIf="!loading">
+        <div *ngIf ="showConfirmedBtn" >
+        <button (click)="confirmRides(true)" class = "btn btn-primary btn-block">Confirm</button>
+        <button (click)="confirmRides(false)" class = "btn btn-danger btn-block">Cancel</button>
+        </div>
+        <p *ngIf="myRides.isConfirmed!==undefined && !myRides.isConfirmed" >Your Request is pending...</p>
+        <p *ngIf="myRides.isConfirmed!==undefined && myRides.isConfirmed" >Your Journey Start From Now</p>
+        <div class="btn-group" *ngIf="!loading && drivers.length !== 0">
           <button class="btn btn-primary" (click)="getDetails(false)">
             Request Shared Ride
           </button>
@@ -99,6 +111,9 @@
             Request Private Ride
           </button>
         </div>
+        <h5 *ngIf="drivers.length === 0" class="text-danger">
+          Drivers Are Not Available At the Moment :(
+        </h5>
         <div
           [hidden]="!showDetails"
           class="bg-primary text-light p-3"
@@ -107,39 +122,61 @@
           <p id="duration"></p>
           <p id="distance"></p>
         </div>
-        <ul>
-          <table>
-            <tr>
-              <th>Firstname</th>
-              <th>Contact</th>
-              <th>Price</th>
-            </tr>
-            <tr></tr>
-            <tr *ngFor="let r of myRides.riders">
-              <td>{{ r.userDetails.name }}</td>
-              <td>{{ r.userDetails.contact }}</td>
-              <td>{{ r.userDetails.price }}</td>
-            </tr>
-          </table>
 
-          <button
-            (click)="onPromoClick()"
-            class="btn btn-success"
-            *ngIf="isPromo"
-          >
-            Get Promotions
-          </button>
-          <span *ngIf="price" class="badge badge-success">
-            new price {{ price }}</span
-          >
-        </ul>
+        <table class="table" *ngIf="myRides.riders.length !== 0">
+          <tr>
+            <th>Name</th>
+            <th>Contact</th>
+            <th>Price</th>
+          </tr>
+          <tr></tr>
+          <tr *ngFor="let r of myRides.riders">
+            <td>{{ r.userDetails.name }}</td>
+            <td>{{ r.userDetails.contact }}</td>
+            <td>{{ r.userDetails.price }}</td>
+          </tr>
+        </table>
+
+        <table class="table" *ngIf="drivers.length !== 0">
+          <tr>
+            <th>Name</th>
+            <th>Contact</th>
+            <th></th>
+          </tr>
+          <tr></tr>
+          <tr *ngFor="let d of drivers">
+            <td>{{ d.name }}</td>
+            <td>{{ d.contact }}</td>
+            <td>
+              <button
+                class="btn"
+                ngClass="{'btn-success':d.isSelected}"
+                [disabled]="d.isSelected"
+                (click)="driverSelect(d._id)"
+              >
+                {{ d.isSelected ? "Selected" : "Not Selected" }}
+              </button>
+            </td>
+          </tr>
+        </table>
+
+        <button
+          (click)="onPromoClick()"
+          class="btn btn-success"
+          *ngIf="isPromo"
+        >
+          Get Promotions
+        </button>
+        <span *ngIf="price" class="badge badge-success">
+          new price {{ price }}</span
+        >
 
         <ul>
-          <li class="text" *ngFor="let item of items | async">
-             {{item.name}}
+          <li class="text" *ngFor="let item of (items | async)">
+            {{ item.name }}
           </li>
         </ul>
-        
+
         <button (click)="deleteRide()" class="btn btn-success">
           Cancel Ride
         </button>

@@ -2,8 +2,12 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 const riderSchema = new Schema({
-  id:String,
+  id: String,
   user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "user"
+  },
+  driver: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "user"
   },

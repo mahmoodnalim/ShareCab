@@ -7,7 +7,7 @@ const mongoose = require("mongoose");
 const Rides = require("../models/rides");
 const RideHistory = require("../models/rideHistory");
 const router = express.Router();
-
+const Dava = require("../models/availableDrivers");
 const db =
   "mongodb://usermamuliga:passwordmamuliga1@ds145072.mlab.com:45072/sharecab";
 //  "mongodb://localhost/sharecab";
@@ -91,8 +91,8 @@ router.post("/register", (req, res) => {
           isDriver: user.isDriver,
           email: user.email,
           contact: user.contact,
-          isPromo: user.isPromo,
-        //  proPic: user.proPic
+          isPromo: user.isPromo
+          //  proPic: user.proPic
         };
         let token = jwt.sign(payload, "secretKey");
         res.status(200).send({ token });
@@ -150,8 +150,8 @@ router.post("/login", (req, res) => {
           isDriver: user.isDriver,
           email: user.email,
           contact: user.contact,
-          isPromo: user.isPromo,
-        //  proPic: user.proPic
+          isPromo: user.isPromo
+          //  proPic: user.proPic
         };
         let token = jwt.sign(payload, "secretKey");
         res.status(200).send({ token });
@@ -212,8 +212,8 @@ router.post("/rides", async (req, res) => {
   }
 });
 
-router.get("/rides", async (req, res) => {
-  const riders = await Rider.find().sort("-distance");
+router.get("/rides/:did", async (req, res) => {
+  const riders = await Rider.find({ driver: req.params.did }).sort("-distance");
   res.send(riders);
 });
 
@@ -247,6 +247,30 @@ router.delete("/ridesd/:id", async (req, res) => {
   const r = await Rides.findByIdAndDelete(id);
   res.send(r);
 });
+
+router.put("/ridesd/:id",async (req,res)=>{
+  const id= req.params.id;
+  const {isConfirmed, uid} = req.body;
+  const ride = await Rides.findById(id) ;
+  ride.riders.find(r=>r.uid===uid).isConfirmed=isConfirmed;
+  await ride.save();
+  res.send(ride);
+})
+
+router.put("/ridesd/d/:id",async (req,res)=>{
+  const id= req.params.id;
+  const {isConfirmed} = req.body;
+  const ride = await Rides.findByIdAndUpdate(id,{isConfirmed}) ;
+  
+  
+  res.send(ride);
+})
+
+router.get("/ridesd/:id",async (req,res)=>{
+  const r= await Rides.findById(req.params.id);
+  res.send(r);
+  
+})
 
 router.delete("/rides/:id", async (req, res) => {
   try {
@@ -298,4 +322,26 @@ router.get("/userd", async (req, res) => {
 //     "https://eu1.locationiq.com/v1/reverse.php?key=6939bb17fa5a3e&lat=6.7932617&lon=79.8974264&format=json";
 //   res.send(res);
 // });
+
+router.post("/adrivers", async (req, res) => {
+  const dava = new Dava(req.body);
+  await dava.save();
+  res.send(dava);
+});
+
+router.delete("/adrivers/:did", async (req, res) => {
+  await Dava.deleteOne({ driver: req.params.did });
+  res.send({ msg: "Unavailable success" });
+});
+
+router.get("/adrivers", async (req, res) => {
+  const davas = await Dava.find();
+  res.send(davas);
+});
+
+router.get("/adrivers/:did", async (req, res) => {
+  const dava = await Dava.findOne({ driver: req.params.did });
+  res.send(dava);
+});
+
 module.exports = router;

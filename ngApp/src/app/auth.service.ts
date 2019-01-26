@@ -3,6 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { JwtHelperService } from "@auth0/angular-jwt";
 import { DriverHomeComponent } from "./driver-home/driver-home.component";
 import { post } from "selenium-webdriver/http";
+import { Driver } from "selenium-webdriver/safari";
 
 @Injectable()
 export class AuthService {
@@ -16,6 +17,7 @@ export class AuthService {
   private _rideHistory = "http://localhost:3000/api/rideHistory/";
   private _userdUrl = "http://localhost:3000/api/userd/";
   private _promoUrl = "http://localhost:3000/api/addPromo/";
+  private _driverUrl = "http://localhost:3000/api/adrivers/";
   // private _registerUrl = "https://sharecab123.herokuapp.com/api/register";
   // private _loginUrl = "https://sharecab123.herokuapp.com/api/login";
 
@@ -60,7 +62,7 @@ export class AuthService {
     return this.http.post(this._ridesUrl, riders);
   }
   getRiders() {
-    return this.http.get(this._ridesUrl);
+    return this.http.get(this._ridesUrl + this.getCurrentUser().uid);
   }
   getAddress(lat, lng) {
     return this.http.get(
@@ -77,6 +79,19 @@ export class AuthService {
     const id = this.getCurrentUser().uid;
     return this.http.get(this._rideUrl + id);
   }
+  userConfirmRide(id,obj){
+    return this.http.put(this._rideUrl+id, obj);
+  }
+  
+  driverConfirmRide(id,obj){
+    return this.http.put(this._rideUrl+"d/"+id, obj);
+  }
+
+  getOneRide(id){
+    return this.http.get(this._ridesUrl+id);
+  }
+
+
   deleteRider(id) {
     return this.http.delete(this._ridesUrl + id);
   }
@@ -95,11 +110,11 @@ export class AuthService {
     return this.http.get(this._userdUrl);
   }
 
-  addPromo(userId){
-    return this.http.put(this._promoUrl,{id:userId});
+  addPromo(userId) {
+    return this.http.put(this._promoUrl, { id: userId });
   }
 
-  getPromo(){
+  getPromo() {
     return this.http.get(this._promoUrl);
   }
   // getPrice() {
@@ -107,5 +122,22 @@ export class AuthService {
 
   //   );
   // }
+
+  postADriver(obj) {
+    return this.http.post<any>(this._driverUrl, obj);
+  }
+  deleteADriver() {
+    return this.http.delete(this._driverUrl + this.getCurrentUser().uid);
+  }
+
+  getADriver() {
+    return this.http.get(this._driverUrl);
+  }
+
+  getOneADriver() {
+    return this.http.get(this._driverUrl + this.getCurrentUser().uid);
+  }
+
+
 }
 // `${this._eventsUrl}?token=${localStorage.token}`
